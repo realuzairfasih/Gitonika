@@ -1,5 +1,5 @@
 <template>
-  <div class="changes">
+  <div class="changes" :key="rerender">
     <div class="panel-header">
       <button>
         <svg viewBox="0 0 24 24">
@@ -13,11 +13,13 @@
         </svg>
       </button>
     </div>
-    <changes-container 
+    <changes-container
+      @changeStaging="addToStage"
       kind="Unstaged"
       :content="getUnstagedFiles()"
     />
     <changes-container
+      @changeStaging="removeFromStage"
       kind="Staged"
       :content="getStagedFiles()"
     />
@@ -40,7 +42,8 @@ export default {
   },
   data () {
     return {
-      files: {}
+      files: {},
+      rerender: 0
     }
   },
   methods: {
@@ -75,7 +78,8 @@ export default {
         if (this.dirfiles.files) {
           this.dirfiles.files.forEach(file => {
             vm.files[file.slice(0, 1).replace('/', '') + file.slice(1)] = {
-              staged: false
+              staged: false,
+              filename: file.slice(0, 1).replace('/', '') + file.slice(1)
             }
           });
         }
@@ -93,6 +97,29 @@ export default {
         // this.files = this.files.concat(this.stage.indices.map(file => ({ ...file, modified: true, staged: true })))
         // let unstagedFiles = this.dirfiles.filter(file =>)
       }
+    },
+    addToStage (filename=null) {
+      console.log('Added to stage')
+      if (filename) {
+        console.log(this.files[filename])
+        this.files[filename].staged = true
+        console.log(this.getStagedFiles())
+      } else {
+        Object.values(this.files).forEach(file => {
+          file.staged = true
+        })
+      }
+      this.rerender++
+    },
+    removeFromStage (filename=null) {
+      if (filename) {
+        this.files[filename].staged = false
+      } else {
+        Object.values(this.files).forEach(file => {
+          file.staged = false
+        })
+      }
+      this.rerender++
     }
   },
   watch: {

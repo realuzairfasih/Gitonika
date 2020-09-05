@@ -41,10 +41,12 @@ export default {
       if (this.kind == 'Unstaged') {
         addFileToStage(this.repo_path, filename, () => {
           console.log('The file was added')
+          this.$emit('changeStaging', filename)
         })
       } else {
         removeFileFromStage(this.repo_path, filename, () => {
           console.log('The file was removed')
+          this.$emit('changeStaging', filename)
         })
       }
     },
@@ -52,10 +54,12 @@ export default {
       if (this.kind == 'Unstaged') {
         stageAllFiles(this.repo_path, () => {
           console.log('All files were added')
+          this.$emit('changeStaging')
         })
       } else {
         unstageAllFiles(this.repo_path, () => {
         console.log('All files were removed')
+          this.$emit('changeStaging')
         })
       }
     }

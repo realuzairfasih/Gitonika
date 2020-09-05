@@ -52,7 +52,7 @@ const stageAllFiles = (repo_path, callback) => {
 }
 
 const unstageAllFiles = (repo_path, callback) => {
-  execute(`cd ${repo_path} && git reset`, res => {
+  execute(`cd ${repo_path} && git rm --cached -r . && git reset --hard`, res => {
     if (res.success) {
       console.log('[CHILD_PROCESS]', res.output)
       callback()

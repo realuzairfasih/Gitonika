@@ -14,8 +14,9 @@ const watchdog = (pathToHound, callback) => {
     console.log(filename);
     
     // Notify changes
-    callback();
-  
+    if (filename != '.git') {
+      callback();
+    }
   });
   
 }

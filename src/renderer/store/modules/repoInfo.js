@@ -30,7 +30,7 @@ const mutations = {
 const actions = {
   SetPathWithExplorer ({ commit, dispatch }) {
     const repoPath = dialog.showOpenDialog({properties: ['openDirectory', 'showHiddenFiles']})
-    if (repoPath.length > 0) {
+    if (repoPath && repoPath.length > 0) {
       dispatch('SetPath', repoPath[0])
     }
   },
